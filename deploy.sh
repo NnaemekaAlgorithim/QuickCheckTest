@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Configuration
-PROJECT_DIR="/home/nwodo/InventoryMaster2"
+PROJECT_DIR="/home/nwodo/QuickCheckTest"
 VENV_PATH="$PROJECT_DIR/venv"
-REPO_URL="https://github.com/NnaemekaAlgorithim/InventoryMaster2.git"  # Replace with your repo URL
+REPO_URL="https://github.com/NnaemekaAlgorithim/QuickCheckTest.git"  # Replace with your repo URL
 BRANCH="main"  # Replace with your branch name
-GUNICORN_SERVICE="gunicorn_inventorymaster2"
+GUNICORN_SERVICE="gunicorn_QuickCheckTest"
 NGINX_SERVICE="nginx"
 
 # Exit on any error
