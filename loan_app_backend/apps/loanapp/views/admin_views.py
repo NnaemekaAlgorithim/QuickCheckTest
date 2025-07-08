@@ -86,6 +86,7 @@ class AdminUserDeleteView(generics.DestroyAPIView):
 
 class AdminMakeSuperUserView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
+    serializer_class = UserProfileSerializer
     queryset = Users.objects.all()
     lookup_field = 'pk'
 
