@@ -58,11 +58,16 @@ class LoginView(generics.GenericAPIView):
                 "message": "Validation failed.",
                 "data": serializer.errors
             }, status=400)
+
         user = serializer.validated_data['user']
 
         refresh = RefreshToken.for_user(user)
+
+        user_data = UserProfileSerializer(user).data
+        user_data['is_superuser'] = user.is_superuser
+
         data = {
-            'user': UserProfileSerializer(user).data,
+            'user': user_data,
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh),
             'access_token_expiration': timezone.now() + refresh.access_token.lifetime,
@@ -87,6 +92,7 @@ class ActivateUserView(generics.GenericAPIView):
                 "message": "Validation failed.",
                 "data": serializer.errors
             }, status=400)
+
         email = serializer.validated_data['email']
         resend_code = serializer.validated_data['resend_code']
         code = serializer.validated_data['code']
@@ -114,10 +120,13 @@ class ActivateUserView(generics.GenericAPIView):
 
         refresh = RefreshToken.for_user(user)
 
+        user_data = UserProfileSerializer(user).data
+        user_data['is_superuser'] = user.is_superuser
+
         return JsonResponse({
             "message": "User activated successfully.",
             "data": {
-                "user": UserProfileSerializer(user).data,
+                "user": user_data,
                 "access_token": str(refresh.access_token),
                 "refresh_token": str(refresh),
                 "access_token_expiration": (timezone.now() + refresh.access_token.lifetime).isoformat(),
