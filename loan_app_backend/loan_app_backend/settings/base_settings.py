@@ -113,10 +113,13 @@ MIDDLEWARE = [
     'middlewares.user_middleware.CurrentUserMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'middlewares.response_middleware.APIResponseMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
 

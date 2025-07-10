@@ -119,7 +119,9 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
 
 
 class LoanApplicationSerializer(serializers.ModelSerializer):
+    user = UserProfileSerializer(read_only=True)
+    
     class Meta:
         model = LoanApplication
-        fields = ['id', 'amount_requested', 'purpose', 'status']
+        fields = ['id', 'amount_requested', 'purpose', 'user', 'status']
         read_only_fields = ['status']
