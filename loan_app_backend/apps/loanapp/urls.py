@@ -23,8 +23,8 @@ urlpatterns = [
     path('profile/', UserProfileView.as_view(), name='user-profile'),
     path('loans/', LoanApplicationView.as_view(), name='loan-application'),
     path("admin/users/", AdminUserListView.as_view(), name="admin-user-list"),
-    path("admin/users/<int:pk>/delete/", AdminUserDeleteView.as_view(), name="admin-user-delete"),
-    path("admin/users/<int:pk>/make-superuser/", AdminMakeSuperUserView.as_view(), name="admin-user-make-superuser"),
+    path("admin/users/<str:pk>/delete/", AdminUserDeleteView.as_view(), name="admin-user-delete"),
+    path("admin/users/<str:pk>/make-superuser/", AdminMakeSuperUserView.as_view(), name="admin-user-make-superuser"),
     path("admin/loans/", AdminLoanListView.as_view(), name="admin-loan-list"),
-    path("admin/loans/<int:pk>/update/", AdminLoanUpdateView.as_view(), name="admin-loan-update"),
+    path("admin/loans/<str:pk>/update/", AdminLoanUpdateView.as_view(), name="admin-loan-update"),
 ]
