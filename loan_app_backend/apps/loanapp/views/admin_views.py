@@ -7,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from loan_app_backend.apps.loanapp.models import Users
 from loan_app_backend.apps.loanapp.models import LoanApplication
-from loan_app_backend.apps.loanapp.serializers import LoanApplicationSerializer, UserProfileSerializer
+from loan_app_backend.apps.loanapp.serializers import AdminLoanApplicationSerializer, LoanApplicationSerializer, UserProfileSerializer
 from loan_app_backend.apps.common.filter import GenericFilterSet
 from loan_app_backend.apps.common.pagination import GenericPagination
 
@@ -64,12 +64,12 @@ class AdminLoanListView(generics.ListAPIView):
 
 
 class AdminLoanUpdateView(generics.UpdateAPIView):
-    serializer_class = LoanApplicationSerializer
+    serializer_class = AdminLoanApplicationSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = LoanApplication.objects.all()
-    lookup_field = 'pk'
+    lookup_field = 'id'
 
-    @extend_schema(summary="Admin Update Loan Status", request=LoanApplicationSerializer, responses={200: LoanApplicationSerializer})
+    @extend_schema(summary="Admin Update Loan Status", request=AdminLoanApplicationSerializer, responses={200: AdminLoanApplicationSerializer})
     def patch(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
 
