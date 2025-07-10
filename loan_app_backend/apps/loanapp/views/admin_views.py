@@ -69,21 +69,9 @@ class AdminLoanUpdateView(generics.UpdateAPIView):
     queryset = LoanApplication.objects.all()
     lookup_field = 'id'
 
-    @extend_schema(
-        summary="Admin Update Loan Status",
-        request=AdminLoanApplicationSerializer,
-        responses={200: AdminLoanApplicationSerializer}
-    )
+    @extend_schema(summary="Admin Update Loan Status", request=AdminLoanApplicationSerializer, responses={200: AdminLoanApplicationSerializer})
     def patch(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        return JsonResponse({
-            "message": "Loan status successfully updated.",
-            "data": serializer.data
-        }, status=200)
+        return super().partial_update(request, *args, **kwargs)
 
 
 class AdminUserDeleteView(generics.DestroyAPIView):
@@ -91,23 +79,9 @@ class AdminUserDeleteView(generics.DestroyAPIView):
     queryset = Users.objects.all()
     lookup_field = 'id'
 
-    @extend_schema(
-        summary="Admin Delete User",
-        responses={204: OpenApiResponse(description="User deleted successfully")}
-    )
+    @extend_schema(summary="Admin Delete User", responses={204: OpenApiResponse(description="User deleted successfully")})
     def delete(self, request, *args, **kwargs):
-        instance = self.get_object()
-        user_id = instance.id
-        email = instance.email
-        self.perform_destroy(instance)
-
-        return JsonResponse({
-            "message": "User deleted successfully.",
-            "data": {
-                "user_id": user_id,
-                "email": email
-            }
-        }, status=200)
+        return super().delete(request, *args, **kwargs)
 
 
 class AdminMakeSuperUserView(generics.UpdateAPIView):
