@@ -37,7 +37,7 @@ class AdminUserListView(generics.ListAPIView):
 
 
 class AdminLoanListView(generics.ListAPIView):
-    serializer_class = LoanApplicationSerializer
+    serializer_class = AdminLoanApplicationSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     pagination_class = GenericPagination
     filter_backends = [DjangoFilterBackend]
@@ -69,26 +69,52 @@ class AdminLoanUpdateView(generics.UpdateAPIView):
     queryset = LoanApplication.objects.all()
     lookup_field = 'id'
 
-    @extend_schema(summary="Admin Update Loan Status", request=AdminLoanApplicationSerializer, responses={200: AdminLoanApplicationSerializer})
+    @extend_schema(
+        summary="Admin Update Loan Status",
+        request=AdminLoanApplicationSerializer,
+        responses={200: AdminLoanApplicationSerializer}
+    )
     def patch(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return JsonResponse({
+            "message": "Loan status successfully updated.",
+            "data": serializer.data
+        }, status=200)
 
 
 class AdminUserDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Users.objects.all()
-    lookup_field = 'pk'
+    lookup_field = 'id'
 
-    @extend_schema(summary="Admin Delete User", responses={204: OpenApiResponse(description="User deleted successfully")})
+    @extend_schema(
+        summary="Admin Delete User",
+        responses={204: OpenApiResponse(description="User deleted successfully")}
+    )
     def delete(self, request, *args, **kwargs):
-        return super().delete(request, *args, **kwargs)
+        instance = self.get_object()
+        user_id = instance.id
+        email = instance.email
+        self.perform_destroy(instance)
+
+        return JsonResponse({
+            "message": "User deleted successfully.",
+            "data": {
+                "user_id": user_id,
+                "email": email
+            }
+        }, status=200)
 
 
 class AdminMakeSuperUserView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
     serializer_class = UserProfileSerializer
     queryset = Users.objects.all()
-    lookup_field = 'pk'
+    lookup_field = 'id'
 
     @extend_schema(
         summary="Admin Make User Superuser",
