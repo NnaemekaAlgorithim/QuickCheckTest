@@ -79,7 +79,7 @@ class AdminUserDeleteView(generics.DestroyAPIView):
     queryset = Users.objects.all()
     lookup_field = 'id'
 
-    @extend_schema(summary="Admin Delete User", responses={204: OpenApiResponse(description="User deleted successfully")})
+    @extend_schema(summary="Admin Delete User", responses={200: OpenApiResponse(description="User deleted successfully")})
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
 
